@@ -47,6 +47,8 @@ async function showPanel(company) {
       results.length,
       "筆"
     );
+    // [Stage 2 spike] 印出 Dcard 探針結果
+    console.info("[求職論壇風評][Dcard探針]", resp?.dcardProbe);
     renderResults(panel, results);
   } catch (err) {
     console.error("[求職論壇風評] 搜尋失敗:", err);
