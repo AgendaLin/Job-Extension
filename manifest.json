@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "求職論壇風評",
+  "version": "0.1.0",
+  "description": "在 104 職缺頁彙整 PTT 論壇上的公司討論。",
+  "host_permissions": [
+    "*://*.ptt.cc/*"
+  ],
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://www.104.com.tw/job/*", "*://www.104.com.tw/company/*"],
+      "js": ["src/content.js"],
+      "css": ["src/panel.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}
