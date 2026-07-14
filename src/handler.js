@@ -1,7 +1,8 @@
 import { normalizeCompanyName } from "./lib/normalize.js";
 import { searchPtt as defaultSearchPtt } from "./lib/ptt.js";
 
-export const PTT_BOARDS = ["Tech_Job", "Salary", "Soft_Job"];
+// Tech_Job/Soft_Job 偏理工，Salary 跨領域，job 是通用求職板（含文組/非理工）。
+export const PTT_BOARDS = ["Tech_Job", "Salary", "Soft_Job", "job"];
 
 export function dedupe(results) {
   const seen = new Set();
