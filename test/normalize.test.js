@@ -2,10 +2,10 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { normalizeCompanyName } from "../src/lib/normalize.js";
 
-test("保留全名並補上去後綴的短名", () => {
+test("保留全名、去後綴短名，並補上綽號", () => {
   assert.deepEqual(
     normalizeCompanyName("台灣積體電路製造股份有限公司"),
-    ["台灣積體電路製造股份有限公司", "台灣積體電路製造"]
+    ["台灣積體電路製造股份有限公司", "台灣積體電路製造", "台積電"]
   );
 });
 
@@ -23,11 +23,18 @@ test("後綴夾在中間（分廠名）時取後綴之前的核心名", () => {
   );
 });
 
-test("英文_中文 格式會拆底線分別當搜尋詞", () => {
+test("英文_中文 格式會拆底線分別當搜尋詞（並補綽號）", () => {
   assert.deepEqual(
     normalizeCompanyName("KEYENCE_台灣基恩斯股份有限公司"),
-    ["KEYENCE", "台灣基恩斯股份有限公司", "台灣基恩斯"]
+    ["KEYENCE", "台灣基恩斯股份有限公司", "台灣基恩斯", "基恩斯"]
   );
+});
+
+test("沒有對照到綽號的公司不會多出搜尋詞", () => {
+  assert.deepEqual(normalizeCompanyName("鼎鼎大名科技股份有限公司"), [
+    "鼎鼎大名科技股份有限公司",
+    "鼎鼎大名科技",
+  ]);
 });
 
 test("沒有法律後綴時只回全名", () => {
@@ -35,9 +42,9 @@ test("沒有法律後綴時只回全名", () => {
 });
 
 test("前後空白會被 trim", () => {
-  assert.deepEqual(normalizeCompanyName("  聯發科技股份有限公司 "), [
-    "聯發科技股份有限公司",
-    "聯發科技",
+  assert.deepEqual(normalizeCompanyName("  好棒棒科技股份有限公司 "), [
+    "好棒棒科技股份有限公司",
+    "好棒棒科技",
   ]);
 });
 

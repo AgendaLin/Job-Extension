@@ -1,3 +1,5 @@
+import { aliasNicknames } from "./aliases.js";
+
 // 順序有意義：較長／較具體的後綴（如「股份有限公司」）必須排在它所包含的較短後綴（如「有限公司」）前面，否則會先剝掉短的、留下殘尾「股份」。
 const LEGAL_SUFFIXES = [
   "股份有限公司",
@@ -31,6 +33,9 @@ export function normalizeCompanyName(raw) {
       }
     }
   }
+
+  // 補上人工對照的綽號（例：台灣積體電路製造 → 台積電），正式名在 PTT 搜不到時的關鍵。
+  for (const nick of aliasNicknames(trimmed)) terms.add(nick);
 
   return [...terms];
 }
