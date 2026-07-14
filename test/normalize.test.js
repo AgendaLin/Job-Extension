@@ -16,6 +16,13 @@ test("有限公司也會被去掉", () => {
   );
 });
 
+test("後綴夾在中間（分廠名）時取後綴之前的核心名", () => {
+  assert.deepEqual(
+    normalizeCompanyName("中華汽車工業股份有限公司楊梅廠"),
+    ["中華汽車工業股份有限公司楊梅廠", "中華汽車工業"]
+  );
+});
+
 test("沒有法律後綴時只回全名", () => {
   assert.deepEqual(normalizeCompanyName("Google Taiwan"), ["Google Taiwan"]);
 });

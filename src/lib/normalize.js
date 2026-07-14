@@ -15,14 +15,16 @@ export function normalizeCompanyName(raw) {
 
   const terms = new Set([full]);
 
-  let stripped = full;
+  // 取法律後綴「之前」的核心名。後綴可能夾在中間（例：「中華汽車工業股份有限公司楊梅廠」
+  // → 「中華汽車工業」），所以用 indexOf 切斷，而非只判斷結尾。
   for (const suffix of LEGAL_SUFFIXES) {
-    if (stripped.endsWith(suffix)) {
-      stripped = stripped.slice(0, -suffix.length).trim();
+    const idx = full.indexOf(suffix);
+    if (idx > 0) {
+      const core = full.slice(0, idx).trim();
+      if (core) terms.add(core);
       break;
     }
   }
-  if (stripped && stripped !== full) terms.add(stripped);
 
   return [...terms];
 }

@@ -17,7 +17,7 @@
   }
 
   function detectCompanyName() {
-    // 1) JSON-LD（最穩定）
+    // 1) 職缺頁：JSON-LD JobPosting.hiringOrganization.name（實測最穩）
     for (const el of document.querySelectorAll(
       'script[type="application/ld+json"]'
     )) {
@@ -29,16 +29,16 @@
       }
       const nodes = Array.isArray(data) ? data : [data];
       for (const node of nodes) {
-        const name =
-          node?.hiringOrganization?.name ||
-          (node?.["@type"] === "Organization" ? node?.name : null);
+        const name = node?.hiringOrganization?.name;
         if (name) return String(name).trim();
       }
     }
-    // 2) DOM fallback：指向 /company/ 的連結文字（recon 步驟確認）
-    const link = document.querySelector('a[href*="/company/"]');
-    const text = link?.textContent?.trim();
-    return text || null;
+    // 2) 公司頁（/company/…）：標題 h1 即公司名
+    if (location.pathname.startsWith("/company/")) {
+      const text = document.querySelector("h1")?.textContent?.trim();
+      if (text) return text;
+    }
+    return null;
   }
 
   function createPanel(companyName) {
