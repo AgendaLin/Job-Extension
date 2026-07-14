@@ -21,9 +21,8 @@ export async function handleSearch(company, deps = {}) {
   const terms = normalizeCompanyName(company);
   if (terms.length === 0) return { results: [] };
 
-  const collected = [];
-  for (const term of terms) {
-    collected.push(...(await searchPtt(term, boards)));
-  }
-  return { results: dedupe(collected) };
+  const perTerm = await Promise.all(
+    terms.map((term) => searchPtt(term, boards))
+  );
+  return { results: dedupe(perTerm.flat()) };
 }

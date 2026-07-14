@@ -72,3 +72,25 @@ test("searchPtt 合併多個板的結果，忽略失敗的板", async () => {
     "https://www.ptt.cc/bbs/Tech_Job/M.1.A.html",
   ]);
 });
+
+test("searchPtt fetchFn 拋錯的板貢獻空陣列，不影響其他板", async () => {
+  const fakeFetch = async (url) => {
+    if (url.includes("Tech_Job")) {
+      return {
+        ok: true,
+        text: async () =>
+          `<div class="title"><a href="/bbs/Tech_Job/M.1.A.html">台積電甲</a></div>`,
+      };
+    }
+    throw new Error("network");
+  };
+
+  const results = await searchPtt("台積電", ["Tech_Job", "Salary"], fakeFetch);
+  assert.deepEqual(results, [
+    {
+      title: "台積電甲",
+      board: "Tech_Job",
+      url: "https://www.ptt.cc/bbs/Tech_Job/M.1.A.html",
+    },
+  ]);
+});
