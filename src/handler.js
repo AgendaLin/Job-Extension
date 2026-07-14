@@ -19,10 +19,10 @@ export async function handleSearch(company, deps = {}) {
   const boards = deps.boards || PTT_BOARDS;
 
   const terms = normalizeCompanyName(company);
-  if (terms.length === 0) return { results: [] };
+  if (terms.length === 0) return { results: [], terms: [] };
 
   const perTerm = await Promise.all(
     terms.map((term) => searchPtt(term, boards))
   );
-  return { results: dedupe(perTerm.flat()) };
+  return { results: dedupe(perTerm.flat()), terms };
 }

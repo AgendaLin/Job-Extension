@@ -10,19 +10,25 @@ const LEGAL_SUFFIXES = [
 
 export function normalizeCompanyName(raw) {
   if (typeof raw !== "string") return [];
-  const full = raw.trim();
-  if (!full) return [];
+  const trimmed = raw.trim();
+  if (!trimmed) return [];
 
-  const terms = new Set([full]);
+  // 104 的公司名常是「英文品牌_中文全名」（例：「KEYENCE_台灣基恩斯股份有限公司」）。
+  // 底線黏著的整串在 PTT 搜不到，拆開分別當搜尋詞。
+  const segments = trimmed.split("_").map((s) => s.trim()).filter(Boolean);
 
-  // 取法律後綴「之前」的核心名。後綴可能夾在中間（例：「中華汽車工業股份有限公司楊梅廠」
-  // → 「中華汽車工業」），所以用 indexOf 切斷，而非只判斷結尾。
-  for (const suffix of LEGAL_SUFFIXES) {
-    const idx = full.indexOf(suffix);
-    if (idx > 0) {
-      const core = full.slice(0, idx).trim();
-      if (core) terms.add(core);
-      break;
+  const terms = new Set();
+  for (const seg of segments) {
+    terms.add(seg);
+    // 取法律後綴「之前」的核心名。後綴可能夾在中間（例：「中華汽車工業股份有限公司楊梅廠」
+    // → 「中華汽車工業」），所以用 indexOf 切斷，而非只判斷結尾。
+    for (const suffix of LEGAL_SUFFIXES) {
+      const idx = seg.indexOf(suffix);
+      if (idx > 0) {
+        const core = seg.slice(0, idx).trim();
+        if (core) terms.add(core);
+        break;
+      }
     }
   }
 

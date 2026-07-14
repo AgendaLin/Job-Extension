@@ -23,6 +23,13 @@ test("後綴夾在中間（分廠名）時取後綴之前的核心名", () => {
   );
 });
 
+test("英文_中文 格式會拆底線分別當搜尋詞", () => {
+  assert.deepEqual(
+    normalizeCompanyName("KEYENCE_台灣基恩斯股份有限公司"),
+    ["KEYENCE", "台灣基恩斯股份有限公司", "台灣基恩斯"]
+  );
+});
+
 test("沒有法律後綴時只回全名", () => {
   assert.deepEqual(normalizeCompanyName("Google Taiwan"), ["Google Taiwan"]);
 });

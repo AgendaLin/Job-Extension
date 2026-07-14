@@ -1,6 +1,9 @@
 (async function () {
   const company = detectCompanyName();
-  if (!company) return;
+  if (!company) {
+    console.info("[求職論壇風評] 這頁抓不到公司名，不顯示面板");
+    return;
+  }
 
   const panel = createPanel(company);
   document.body.appendChild(panel);
@@ -10,9 +13,11 @@
       type: "SEARCH_FORUMS",
       company,
     });
-    renderResults(panel, resp?.results || []);
+    const results = resp?.results || [];
+    console.info("[求職論壇風評] 偵測公司:", company, "｜搜尋詞:", resp?.terms, "｜結果:", results.length, "筆");
+    renderResults(panel, results);
   } catch (err) {
-    console.error("[content] search failed", err);
+    console.error("[求職論壇風評] 搜尋失敗:", err);
     renderError(panel);
   }
 
