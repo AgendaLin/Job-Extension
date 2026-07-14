@@ -10,6 +10,7 @@ export const COMPANY_ALIASES = [
   { match: "鴻海精密", nicknames: ["鴻海"] },
   { match: "聯發科技", nicknames: ["聯發科"] },
   { match: "台達電子", nicknames: ["台達電"] },
+  { match: "光寶科技", nicknames: ["光寶科", "光寶"] },
   { match: "世界先進積體電路", nicknames: ["世界先進"] },
   { match: "南亞科技", nicknames: ["南亞科"] },
   { match: "華邦電子", nicknames: ["華邦電"] },
