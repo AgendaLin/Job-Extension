@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildPttSearchUrl, parsePttSearchHtml } from "../src/lib/ptt.js";
+import { buildPttSearchUrl, parsePttSearchHtml, searchPtt } from "../src/lib/ptt.js";
 
 test("buildPttSearchUrl 會 encode 中文與板名", () => {
   const url = buildPttSearchUrl("Tech_Job", "台積電");
@@ -44,4 +44,31 @@ test("parsePttSearchHtml 抽出標題與絕對網址", () => {
 
 test("空 HTML 回空陣列", () => {
   assert.deepEqual(parsePttSearchHtml("", "Salary"), []);
+});
+
+test("searchPtt 合併多個板的結果，忽略失敗的板", async () => {
+  const fakeFetch = async (url) => {
+    if (url.includes("Tech_Job")) {
+      return {
+        ok: true,
+        text: async () =>
+          `<div class="title"><a href="/bbs/Tech_Job/M.1.A.html">台積電甲</a></div>`,
+      };
+    }
+    if (url.includes("Salary")) {
+      return {
+        ok: true,
+        text: async () =>
+          `<div class="title"><a href="/bbs/Salary/M.2.A.html">台積電乙</a></div>`,
+      };
+    }
+    return { ok: false, text: async () => "" }; // 例如某板不存在
+  };
+
+  const results = await searchPtt("台積電", ["Tech_Job", "Salary", "Broken"], fakeFetch);
+  const urls = results.map((r) => r.url).sort();
+  assert.deepEqual(urls, [
+    "https://www.ptt.cc/bbs/Salary/M.2.A.html",
+    "https://www.ptt.cc/bbs/Tech_Job/M.1.A.html",
+  ]);
 });

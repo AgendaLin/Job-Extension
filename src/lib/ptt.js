@@ -24,6 +24,22 @@ export function parsePttSearchHtml(html, board) {
   return results;
 }
 
+export async function searchPtt(term, boards, fetchFn = fetch) {
+  const perBoard = await Promise.all(
+    boards.map(async (board) => {
+      try {
+        const res = await fetchFn(buildPttSearchUrl(board, term));
+        if (!res.ok) return [];
+        return parsePttSearchHtml(await res.text(), board);
+      } catch (err) {
+        console.error("[PTT] fetch failed", board, term, err);
+        return [];
+      }
+    })
+  );
+  return perBoard.flat();
+}
+
 function decodeEntities(s) {
   return s
     .replace(/&amp;/g, "&")
