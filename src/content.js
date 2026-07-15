@@ -47,9 +47,8 @@ async function showPanel(company) {
       results.length,
       "筆"
     );
-    // [Stage 2 spike] 印出 Dcard 探針結果（用 JSON 字串，方便從 console 讀取）
-    console.info("[求職論壇風評][Dcard探針]", JSON.stringify(resp?.dcardProbe));
     renderResults(panel, results);
+    renderDcardLink(panel, resp?.primaryTerm);
   } catch (err) {
     console.error("[求職論壇風評] 搜尋失敗:", err);
     renderError(panel);
@@ -95,6 +94,7 @@ function createPanel(companyName) {
       <button class="jfr-toggle" aria-label="收合">–</button>
     </div>
     <div class="jfr-body"><div class="jfr-loading">搜尋中…</div></div>
+    <div class="jfr-footer"></div>
   `;
   el.querySelector(".jfr-company").textContent = companyName;
   el.querySelector(".jfr-toggle").addEventListener("click", () => {
@@ -132,6 +132,20 @@ function renderResults(panelEl, results) {
 function renderError(panelEl) {
   panelEl.querySelector(".jfr-body").innerHTML =
     `<div class="jfr-empty">搜尋失敗，請稍後再試</div>`;
+}
+
+// Dcard 的 API 從擴充背景抓會被 Cloudflare 擋（Stage 2 實測 403），所以不內嵌，
+// 改成一鍵開 Dcard 站內搜尋——不抓取、不需要 dcard.tw 權限、不會被擋。
+function renderDcardLink(panelEl, term) {
+  const footer = panelEl.querySelector(".jfr-footer");
+  if (!footer || !term) return;
+  const a = document.createElement("a");
+  a.className = "jfr-dcard-link";
+  a.href = `https://www.dcard.tw/search?query=${encodeURIComponent(term)}`;
+  a.target = "_blank";
+  a.rel = "noopener noreferrer";
+  a.textContent = `在 Dcard 搜尋「${term}」`;
+  footer.replaceChildren(a);
 }
 
 function groupByBoard(results) {

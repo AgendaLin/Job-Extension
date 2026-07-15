@@ -4,8 +4,7 @@
   "version": "0.1.0",
   "description": "在 104 職缺頁彙整 PTT 論壇上的公司討論。",
   "host_permissions": [
-    "*://*.ptt.cc/*",
-    "*://*.dcard.tw/*"
+    "*://*.ptt.cc/*"
   ],
   "background": {
     "service_worker": "src/background.js",
