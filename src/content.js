@@ -139,8 +139,7 @@ function buildNewsSection(items) {
 
   const list = document.createElement("div");
   list.className = "jfr-news-list";
-  // 新聞區跨板，所以每筆補上板名
-  for (const item of items) list.appendChild(buildItem(item, true));
+  for (const item of items) list.appendChild(buildItem(item));
 
   section.append(head, list);
   return section;
@@ -153,17 +152,17 @@ function buildBoardSection(board, items) {
   label.className = "jfr-board";
   label.textContent = `PTT / ${board}`;
   section.appendChild(label);
-  for (const item of items) section.appendChild(buildItem(item, false));
+  for (const item of items) section.appendChild(buildItem(item));
   return section;
 }
 
-function buildItem(item, withBoard) {
+function buildItem(item) {
   const a = document.createElement("a");
   a.className = "jfr-item";
   a.href = item.url;
   a.target = "_blank";
   a.rel = "noopener noreferrer";
-  a.textContent = withBoard ? `[${item.board}] ${item.title}` : item.title;
+  a.textContent = item.title;
   return a;
 }
 
