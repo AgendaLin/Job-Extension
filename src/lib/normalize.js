@@ -81,3 +81,19 @@ export function normalizeCompanyName(raw) {
 
   return [...terms];
 }
+
+// 給「跳去外站搜尋」用的單一最佳詞：最貼近人話的叫法。
+// 有綽號用綽號（台積電），否則用中文全名去掉法律後綴（全景軟體），
+// 不用剝過行業詞的版本（「全景」太短，人工搜尋反而不精準）。
+export function primarySearchTerm(raw) {
+  if (typeof raw !== "string") return "";
+  const trimmed = raw.trim();
+  if (!trimmed) return "";
+
+  const nicks = aliasNicknames(trimmed);
+  if (nicks.length) return nicks[0];
+
+  // 104 的「英文品牌_中文全名」格式，中文全名在後段
+  const seg = trimmed.split("_").pop().trim();
+  return stripLegalSuffix(seg) || seg;
+}

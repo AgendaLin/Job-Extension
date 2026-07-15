@@ -48,6 +48,7 @@ async function showPanel(company) {
       "筆"
     );
     renderResults(panel, results);
+    renderExternalLinks(panel, resp?.primaryTerm);
   } catch (err) {
     console.error("[求職論壇風評] 搜尋失敗:", err);
     renderError(panel);
@@ -92,6 +93,7 @@ function createPanel(companyName) {
       <span class="jfr-company"></span>
       <button class="jfr-toggle" aria-label="收合">–</button>
     </div>
+    <div class="jfr-links"></div>
     <div class="jfr-body"><div class="jfr-loading">搜尋中…</div></div>
   `;
   el.querySelector(".jfr-company").textContent = companyName;
@@ -130,6 +132,38 @@ function renderResults(panelEl, results) {
 function renderError(panelEl) {
   panelEl.querySelector(".jfr-body").innerHTML =
     `<div class="jfr-empty">搜尋失敗，請稍後再試</div>`;
+}
+
+// 外站搜尋連結。Dcard 的 API 從擴充背景抓會被 Cloudflare 擋（Stage 2 實測 403），
+// 所以不內嵌，改成一鍵開對方站內搜尋——不抓取、不需要對方網域權限、不會被擋。
+const EXTERNAL_SITES = [
+  {
+    label: "Dcard 搜尋",
+    query: (t) => t, // Dcard 站內搜尋，公司名就夠
+    url: (q) => `https://www.dcard.tw/search?query=${encodeURIComponent(q)}`,
+  },
+  {
+    label: "Google 搜尋",
+    query: (t) => `${t} 評價`, // Google 全網搜尋，補「評價」才問得到風評
+    url: (q) => `https://www.google.com/search?q=${encodeURIComponent(q)}`,
+  },
+];
+
+function renderExternalLinks(panelEl, term) {
+  const bar = panelEl.querySelector(".jfr-links");
+  if (!bar || !term) return;
+  const links = EXTERNAL_SITES.map((site) => {
+    const query = site.query(term);
+    const a = document.createElement("a");
+    a.className = "jfr-ext-link";
+    a.href = site.url(query);
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.textContent = site.label;
+    a.title = `以「${query}」搜尋`;
+    return a;
+  });
+  bar.replaceChildren(...links);
 }
 
 function groupByBoard(results) {

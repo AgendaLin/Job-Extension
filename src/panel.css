@@ -59,6 +59,29 @@
   border-bottom: 1px solid #f2f2f2;
 }
 #jfr-panel .jfr-item:hover { background: #f5f8ff; }
+#jfr-panel .jfr-links {
+  display: flex;
+  gap: 6px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+}
+#jfr-panel .jfr-links:empty { display: none; }
+#jfr-panel.jfr-collapsed .jfr-links { display: none; }
+#jfr-panel .jfr-ext-link {
+  flex: 1;
+  padding: 6px 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background: #fff;
+  color: #1a1a1a;
+  text-decoration: none;
+  font-size: 12px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#jfr-panel .jfr-ext-link:hover { background: #f5f8ff; border-color: #c7d7ff; }
 #jfr-panel .jfr-loading,
 #jfr-panel .jfr-empty {
   padding: 16px 12px;

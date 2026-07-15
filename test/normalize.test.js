@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { normalizeCompanyName } from "../src/lib/normalize.js";
+import { normalizeCompanyName, primarySearchTerm } from "../src/lib/normalize.js";
 
 test("保留全名、去後綴短名、剝行業詞，並補上綽號", () => {
   assert.deepEqual(
@@ -74,4 +74,19 @@ test("空字串或非字串回空陣列", () => {
   assert.deepEqual(normalizeCompanyName(""), []);
   assert.deepEqual(normalizeCompanyName(null), []);
   assert.deepEqual(normalizeCompanyName(undefined), []);
+});
+
+test("primarySearchTerm 有綽號時用綽號", () => {
+  assert.equal(primarySearchTerm("台灣積體電路製造股份有限公司"), "台積電");
+  assert.equal(primarySearchTerm("KEYENCE_台灣基恩斯股份有限公司"), "基恩斯");
+});
+
+test("primarySearchTerm 沒綽號時用中文全名去後綴（不剝行業詞）", () => {
+  assert.equal(primarySearchTerm("全景軟體股份有限公司"), "全景軟體");
+  assert.equal(primarySearchTerm("中華汽車工業股份有限公司楊梅廠"), "中華汽車工業");
+});
+
+test("primarySearchTerm 空輸入回空字串", () => {
+  assert.equal(primarySearchTerm(""), "");
+  assert.equal(primarySearchTerm(null), "");
 });
