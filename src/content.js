@@ -110,23 +110,61 @@ function renderResults(panelEl, results) {
     body.innerHTML = `<div class="jfr-empty">PTT 上找不到相關討論</div>`;
     return;
   }
-  const byBoard = groupByBoard(results);
-  body.innerHTML = "";
-  for (const [board, items] of byBoard) {
-    const section = document.createElement("div");
-    section.className = "jfr-section";
-    section.innerHTML = `<div class="jfr-board">PTT / ${escapeHtml(board)}</div>`;
-    for (const item of items) {
-      const a = document.createElement("a");
-      a.className = "jfr-item";
-      a.href = item.url;
-      a.target = "_blank";
-      a.rel = "noopener noreferrer";
-      a.textContent = item.title;
-      section.appendChild(a);
-    }
-    body.appendChild(section);
+  body.replaceChildren();
+
+  // 先抽走新聞（不分板、預設收合），剩下的才照板分組
+  const news = results.filter((r) => r.isNews);
+  const rest = results.filter((r) => !r.isNews);
+
+  if (news.length) body.appendChild(buildNewsSection(news));
+  for (const [board, items] of groupByBoard(rest)) {
+    body.appendChild(buildBoardSection(board, items));
   }
+}
+
+function buildNewsSection(items) {
+  const section = document.createElement("div");
+  section.className = "jfr-section jfr-news jfr-news-collapsed";
+
+  const head = document.createElement("button");
+  head.className = "jfr-news-head";
+  const caret = document.createElement("span");
+  caret.className = "jfr-caret";
+  caret.textContent = "▸";
+  head.append(caret, document.createTextNode(` 新聞 (${items.length})`));
+  head.addEventListener("click", () => {
+    const collapsed = section.classList.toggle("jfr-news-collapsed");
+    caret.textContent = collapsed ? "▸" : "▾";
+  });
+
+  const list = document.createElement("div");
+  list.className = "jfr-news-list";
+  // 新聞區跨板，所以每筆補上板名
+  for (const item of items) list.appendChild(buildItem(item, true));
+
+  section.append(head, list);
+  return section;
+}
+
+function buildBoardSection(board, items) {
+  const section = document.createElement("div");
+  section.className = "jfr-section";
+  const label = document.createElement("div");
+  label.className = "jfr-board";
+  label.textContent = `PTT / ${board}`;
+  section.appendChild(label);
+  for (const item of items) section.appendChild(buildItem(item, false));
+  return section;
+}
+
+function buildItem(item, withBoard) {
+  const a = document.createElement("a");
+  a.className = "jfr-item";
+  a.href = item.url;
+  a.target = "_blank";
+  a.rel = "noopener noreferrer";
+  a.textContent = withBoard ? `[${item.board}] ${item.title}` : item.title;
+  return a;
 }
 
 function renderError(panelEl) {
@@ -173,12 +211,6 @@ function groupByBoard(results) {
     map.get(r.board).push(r);
   }
   return map;
-}
-
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (c) =>
-    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])
-  );
 }
 
 // 初次執行 + 監看 SPA 換頁
