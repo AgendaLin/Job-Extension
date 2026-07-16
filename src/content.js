@@ -107,7 +107,9 @@ function renderResults(panelEl, results) {
   const body = panelEl.querySelector(".jfr-body");
   panelEl.querySelector(".jfr-title").textContent = `論壇風評 (${results.length})`;
   if (results.length === 0) {
-    body.innerHTML = `<div class="jfr-empty">PTT 上找不到相關討論</div>`;
+    // 公司名比對規則一定有漏網之魚（沒收錄綽號、少見的組織型態…），
+    // 這時導向上方的 Google／Dcard 按鈕——它們的比對能力比我們的規則好。
+    body.innerHTML = `<div class="jfr-empty">PTT 上沒找到相關討論。<br>可能是這家討論本來就少，或公司名沒比對到——<br>試試上面的 Google／Dcard 搜尋。</div>`;
     return;
   }
   body.replaceChildren();
