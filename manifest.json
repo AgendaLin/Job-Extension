@@ -1,8 +1,13 @@
 {
   "manifest_version": 3,
   "name": "求職論壇風評",
-  "version": "0.1.0",
-  "description": "在 104 職缺頁彙整 PTT 論壇上的公司討論。",
+  "version": "1.0.0",
+  "description": "在 104 職缺頁自動彙整這家公司在 PTT 上的討論，不用再開分頁一家家查。",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
   "host_permissions": [
     "*://*.ptt.cc/*"
   ],
