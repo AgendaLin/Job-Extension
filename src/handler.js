@@ -1,9 +1,7 @@
 import { normalizeCompanyName, primarySearchTerm } from "./lib/normalize.js";
 import { searchPtt as defaultSearchPtt } from "./lib/ptt.js";
 import { isNewsTitle } from "./lib/categorize.js";
-
-// Tech_Job/Soft_Job 偏理工，Salary 跨領域，job 是通用求職板（含文組/非理工）。
-export const PTT_BOARDS = ["Tech_Job", "Salary", "Soft_Job", "job"];
+import { boardsForIndustry } from "./lib/boards.js";
 
 export function dedupe(results) {
   const seen = new Set();
@@ -16,12 +14,14 @@ export function dedupe(results) {
   return out;
 }
 
-export async function handleSearch(company, deps = {}) {
+export async function handleSearch(company, industry, deps = {}) {
   const searchPtt = deps.searchPtt || defaultSearchPtt;
-  const boards = deps.boards || PTT_BOARDS;
+  // 依 104 的產業類別決定要不要加專業板（會計→Accounting、金融→Bank_Service…）
+  const boards = deps.boards || boardsForIndustry(industry);
 
   const terms = normalizeCompanyName(company);
-  if (terms.length === 0) return { results: [], terms: [], primaryTerm: "" };
+  if (terms.length === 0)
+    return { results: [], terms: [], primaryTerm: "", boards };
 
   const perTerm = await Promise.all(
     terms.map((term) => searchPtt(term, boards))
@@ -36,5 +36,6 @@ export async function handleSearch(company, deps = {}) {
     results,
     terms,
     primaryTerm: primarySearchTerm(company),
+    boards, // 回傳實際搜了哪些板，方便從 console 診斷
   };
 }

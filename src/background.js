@@ -14,7 +14,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message?.type === "SEARCH_FORUMS") {
     // 等字典就緒再搜，避免第一次查詢用到舊字典而漏抓
     aliasesReady
-      .then(() => handleSearch(message.company))
+      .then(() => handleSearch(message.company, message.industry))
       .then(sendResponse)
       .catch((err) => {
         console.error("[background] handleSearch failed", err);

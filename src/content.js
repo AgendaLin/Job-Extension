@@ -35,6 +35,7 @@ async function showPanel(company) {
     const resp = await chrome.runtime.sendMessage({
       type: "SEARCH_FORUMS",
       company,
+      industry: detectIndustry(),
     });
     if (panel !== document.getElementById("jfr-panel")) return; // 期間又換頁了
     const results = resp?.results || [];
@@ -43,6 +44,8 @@ async function showPanel(company) {
       company,
       "｜搜尋詞:",
       resp?.terms,
+      "｜搜的板:",
+      resp?.boards,
       "｜結果:",
       results.length,
       "筆"
@@ -80,6 +83,38 @@ function detectCompanyName() {
   if (location.pathname.startsWith("/company/")) {
     const text = document.querySelector("h1")?.textContent?.trim();
     if (text) return text;
+  }
+  return null;
+}
+
+// 產業類別 → 決定要不要加搜專業板（會計→Accounting…），見 lib/boards.js
+function detectIndustry() {
+  // 1) 職缺頁：JSON-LD JobPosting.industry（例：「光電產業」）
+  for (const el of document.querySelectorAll(
+    'script[type="application/ld+json"]'
+  )) {
+    let data;
+    try {
+      data = JSON.parse(el.textContent);
+    } catch {
+      continue;
+    }
+    const nodes = Array.isArray(data) ? data : [data];
+    for (const node of nodes) {
+      if (node?.["@type"] === "JobPosting" && node.industry) {
+        return String(node.industry).trim();
+      }
+    }
+  }
+  // 2) 公司頁：「產業類別」欄位，值在標籤父層的下一個兄弟（例：「電腦軟體服務業」）
+  if (location.pathname.startsWith("/company/")) {
+    for (const el of document.querySelectorAll("h3, dt, span, div")) {
+      if (el.children.length === 0 && el.textContent.trim() === "產業類別") {
+        const value = el.parentElement?.nextElementSibling?.textContent?.trim();
+        if (value) return value;
+        break;
+      }
+    }
   }
   return null;
 }

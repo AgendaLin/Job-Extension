@@ -31,7 +31,7 @@ test("handleSearch 正規化公司名、跨搜尋詞合併並去重", async () =
     return [];
   };
 
-  const { results } = await handleSearch("阿貓阿狗股份有限公司", {
+  const { results } = await handleSearch("阿貓阿狗股份有限公司", null, {
     searchPtt: fakeSearchPtt,
     boards: ["Tech_Job"],
   });
@@ -41,7 +41,33 @@ test("handleSearch 正規化公司名、跨搜尋詞合併並去重", async () =
   assert.deepEqual(results.map((r) => r.url).sort(), ["shared", "unique"]);
 });
 
+test("handleSearch 依產業類別加上專業板", async () => {
+  let usedBoards = null;
+  const fake = async (_term, boards) => {
+    usedBoards = boards;
+    return [];
+  };
+  const r = await handleSearch("安永聯合會計師事務所", "會計服務業", {
+    searchPtt: fake,
+  });
+  assert.ok(usedBoards.includes("Accounting"), "會計業要搜 Accounting 板");
+  assert.ok(usedBoards.includes("Salary"), "基本板仍要保留");
+  assert.deepEqual(r.boards, usedBoards, "回傳的 boards 要與實際搜的一致");
+});
+
+test("handleSearch 沒有產業資訊時只用基本板", async () => {
+  let usedBoards = null;
+  const fake = async (_term, boards) => {
+    usedBoards = boards;
+    return [];
+  };
+  await handleSearch("阿貓阿狗股份有限公司", null, { searchPtt: fake });
+  assert.equal(usedBoards.includes("Accounting"), false);
+});
+
 test("handleSearch 對空公司名回空結果", async () => {
-  const { results } = await handleSearch("", { searchPtt: async () => [] });
+  const { results } = await handleSearch("", null, {
+    searchPtt: async () => [],
+  });
   assert.deepEqual(results, []);
 });

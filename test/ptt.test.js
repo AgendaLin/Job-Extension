@@ -46,6 +46,52 @@ test("空 HTML 回空陣列", () => {
   assert.deepEqual(parsePttSearchHtml("", "Salary"), []);
 });
 
+test("buildPttSearchUrl 第 2 頁之後才帶 page 參數", () => {
+  assert.equal(
+    buildPttSearchUrl("Accounting", "資誠"),
+    "https://www.ptt.cc/bbs/Accounting/search?q=%E8%B3%87%E8%AA%A0"
+  );
+  assert.equal(
+    buildPttSearchUrl("Accounting", "資誠", 2),
+    "https://www.ptt.cc/bbs/Accounting/search?q=%E8%B3%87%E8%AA%A0&page=2"
+  );
+});
+
+test("滿頁就續抓下一頁，沒滿就停（自適應分頁）", async () => {
+  const fullPage = (n) =>
+    Array.from(
+      { length: n },
+      (_, i) =>
+        `<div class="title"><a href="/bbs/Accounting/M.${i}.A.html">文章${i}</a></div>`
+    ).join("");
+
+  const asked = [];
+  const fakeFetch = async (url) => {
+    asked.push(url);
+    const page = Number(new URL(url).searchParams.get("page") || 1);
+    // 第 1、2 頁滿 20 筆，第 3 頁只有 5 筆 → 應該停在第 3 頁
+    return { ok: true, text: async () => fullPage(page === 3 ? 5 : 20) };
+  };
+
+  const results = await searchPtt("資誠", ["Accounting"], fakeFetch);
+  assert.equal(asked.length, 3);
+  assert.equal(results.length, 45); // 20 + 20 + 5
+});
+
+test("第一頁沒滿就不抓第二頁", async () => {
+  const asked = [];
+  const fakeFetch = async (url) => {
+    asked.push(url);
+    return {
+      ok: true,
+      text: async () =>
+        `<div class="title"><a href="/bbs/Salary/M.1.A.html">只有一筆</a></div>`,
+    };
+  };
+  await searchPtt("冷門公司", ["Salary"], fakeFetch);
+  assert.equal(asked.length, 1);
+});
+
 test("searchPtt 合併多個板的結果，忽略失敗的板", async () => {
   const fakeFetch = async (url) => {
     if (url.includes("Tech_Job")) {
