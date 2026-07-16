@@ -1,0 +1,285 @@
+{
+  "version": 1,
+  "updated": "2026-07-14",
+  "aliases": [
+    {
+      "match": "台灣積體電路",
+      "nicknames": [
+        "台積電"
+      ]
+    },
+    {
+      "match": "聯華電子",
+      "nicknames": [
+        "聯電"
+      ]
+    },
+    {
+      "match": "鴻海精密",
+      "nicknames": [
+        "鴻海"
+      ]
+    },
+    {
+      "match": "聯發科技",
+      "nicknames": [
+        "聯發科"
+      ]
+    },
+    {
+      "match": "台達電子",
+      "nicknames": [
+        "台達電"
+      ]
+    },
+    {
+      "match": "光寶科技",
+      "nicknames": [
+        "光寶科",
+        "光寶"
+      ]
+    },
+    {
+      "match": "世界先進積體電路",
+      "nicknames": [
+        "世界先進"
+      ]
+    },
+    {
+      "match": "南亞科技",
+      "nicknames": [
+        "南亞科"
+      ]
+    },
+    {
+      "match": "華邦電子",
+      "nicknames": [
+        "華邦電"
+      ]
+    },
+    {
+      "match": "旺宏電子",
+      "nicknames": [
+        "旺宏"
+      ]
+    },
+    {
+      "match": "瑞昱半導體",
+      "nicknames": [
+        "瑞昱"
+      ]
+    },
+    {
+      "match": "聯詠科技",
+      "nicknames": [
+        "聯詠"
+      ]
+    },
+    {
+      "match": "群聯電子",
+      "nicknames": [
+        "群聯"
+      ]
+    },
+    {
+      "match": "力晶積成",
+      "nicknames": [
+        "力積電"
+      ]
+    },
+    {
+      "match": "台灣基恩斯",
+      "nicknames": [
+        "基恩斯"
+      ]
+    },
+    {
+      "match": "廣達電腦",
+      "nicknames": [
+        "廣達"
+      ]
+    },
+    {
+      "match": "仁寶電腦",
+      "nicknames": [
+        "仁寶"
+      ]
+    },
+    {
+      "match": "緯創資通",
+      "nicknames": [
+        "緯創"
+      ]
+    },
+    {
+      "match": "和碩聯合",
+      "nicknames": [
+        "和碩"
+      ]
+    },
+    {
+      "match": "華碩電腦",
+      "nicknames": [
+        "華碩"
+      ]
+    },
+    {
+      "match": "技嘉科技",
+      "nicknames": [
+        "技嘉"
+      ]
+    },
+    {
+      "match": "微星科技",
+      "nicknames": [
+        "微星"
+      ]
+    },
+    {
+      "match": "友達光電",
+      "nicknames": [
+        "友達"
+      ]
+    },
+    {
+      "match": "群創光電",
+      "nicknames": [
+        "群創"
+      ]
+    },
+    {
+      "match": "台灣大哥大",
+      "nicknames": [
+        "台灣大",
+        "台哥大"
+      ]
+    },
+    {
+      "match": "遠傳電信",
+      "nicknames": [
+        "遠傳"
+      ]
+    },
+    {
+      "match": "台灣塑膠工業",
+      "nicknames": [
+        "台塑"
+      ]
+    },
+    {
+      "match": "南亞塑膠",
+      "nicknames": [
+        "南亞"
+      ]
+    },
+    {
+      "match": "台灣化學纖維",
+      "nicknames": [
+        "台化"
+      ]
+    },
+    {
+      "match": "中國鋼鐵",
+      "nicknames": [
+        "中鋼"
+      ]
+    },
+    {
+      "match": "長榮海運",
+      "nicknames": [
+        "長榮"
+      ]
+    },
+    {
+      "match": "陽明海運",
+      "nicknames": [
+        "陽明"
+      ]
+    },
+    {
+      "match": "萬海航運",
+      "nicknames": [
+        "萬海"
+      ]
+    },
+    {
+      "match": "台灣中油",
+      "nicknames": [
+        "中油"
+      ]
+    },
+    {
+      "match": "台灣電力",
+      "nicknames": [
+        "台電"
+      ]
+    },
+    {
+      "match": "統一企業",
+      "nicknames": [
+        "統一"
+      ]
+    },
+    {
+      "match": "富邦金融控股",
+      "nicknames": [
+        "富邦金"
+      ]
+    },
+    {
+      "match": "國泰金融控股",
+      "nicknames": [
+        "國泰金"
+      ]
+    },
+    {
+      "match": "中國信託商業銀行",
+      "nicknames": [
+        "中國信託",
+        "中信"
+      ]
+    },
+    {
+      "match": "工業技術研究院",
+      "nicknames": [
+        "工研院"
+      ]
+    },
+    {
+      "match": "資訊工業策進會",
+      "nicknames": [
+        "資策會"
+      ]
+    },
+    {
+      "match": "中華經濟研究院",
+      "nicknames": [
+        "中經院"
+      ]
+    },
+    {
+      "match": "台灣經濟研究院",
+      "nicknames": [
+        "台經院"
+      ]
+    },
+    {
+      "match": "國家中山科學研究院",
+      "nicknames": [
+        "中科院"
+      ]
+    },
+    {
+      "match": "台灣自來水",
+      "nicknames": [
+        "台水"
+      ]
+    },
+    {
+      "match": "台灣大學醫學院附設醫院",
+      "nicknames": [
+        "台大醫院"
+      ]
+    }
+  ]
+}

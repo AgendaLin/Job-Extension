@@ -1,4 +1,8 @@
 // 正式名片段 → PTT 慣用綽號。
+//
+// 這份是「內建快照」，只在第一次執行或抓不到遠端時當後備。
+// 實際生效的是遠端字典 data/aliases.json（見 remote-aliases.js）——
+// 要新增公司請改那份，改完 push 就即時生效、不必等 Chrome 商店重新審核。
 // 104 只給正式全名（如「台灣積體電路製造股份有限公司」），但論壇用綽號（「台積電」）。
 // 有些綽號是縮寫，無法從正式名以規則推得，只能人工對照。這份表逐步擴充。
 // 判斷方式：公司名「包含」match 片段就補上對應綽號當額外搜尋詞。
@@ -61,13 +65,20 @@ export const COMPANY_ALIASES = [
   { match: "台灣大學醫學院附設醫院", nicknames: ["台大醫院"] },
 ];
 
+// 目前生效的字典。預設是內建快照，background 抓到遠端字典後會換掉。
+let activeAliases = COMPANY_ALIASES;
+
+export function setAliases(list) {
+  activeAliases = Array.isArray(list) && list.length > 0 ? list : COMPANY_ALIASES;
+}
+
 export function aliasNicknames(name) {
   if (typeof name !== "string" || !name) return [];
   // 台/臺 兩種寫法混用（臺灣自來水 vs 台灣自來水），統一成「台」再比對，
   // 對照表的 match 一律用「台」，不必為了兩種寫法各列一筆。
   const normalized = name.replace(/臺/g, "台");
   const out = [];
-  for (const entry of COMPANY_ALIASES) {
+  for (const entry of activeAliases) {
     if (normalized.includes(entry.match)) out.push(...entry.nicknames);
   }
   return out;
