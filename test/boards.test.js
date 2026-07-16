@@ -58,9 +58,34 @@ test("媒體傳播類加 media-chaos 板", () => {
 });
 
 // 以下產業名稱皆取自 104 官方分類表（Indust.json），非杜撰
-test("醫療類加 Nurse 板（實測長庚/台大醫院各 20 筆）", () => {
-  assert.deepEqual(boardsForIndustry("醫院"), [...BASE_BOARDS, "Nurse"]);
-  assert.deepEqual(boardsForIndustry("診所"), [...BASE_BOARDS, "Nurse"]);
+test("醫療類同時加 Nurse 與 Doctor-Info（一個產業可對多板）", () => {
+  assert.deepEqual(boardsForIndustry("醫院"), [
+    ...BASE_BOARDS,
+    "Nurse",
+    "Doctor-Info",
+  ]);
+});
+
+test("國營事業類加 Gov_owned 板（實測台電/中油/台水/中華郵政各 20 筆）", () => {
+  for (const ind of ["電力供應業", "用水供應業", "郵政業", "石油煉製業"]) {
+    assert.ok(
+      boardsForIndustry(ind).includes("Gov_owned"),
+      `${ind} 應加 Gov_owned`
+    );
+  }
+});
+
+test("電力/水的關鍵字不可誤中製造業", () => {
+  // 這些是製造業，不是國營事業
+  assert.deepEqual(boardsForIndustry("電力機械器材製造修配業"), BASE_BOARDS);
+  assert.deepEqual(boardsForIndustry("其他電力器材製造業"), BASE_BOARDS);
+  assert.deepEqual(boardsForIndustry("水泥及水泥製品製造業"), BASE_BOARDS);
+});
+
+test("中華郵政同時是金融與國營，兩個板都要加", () => {
+  const out = boardsForIndustry("郵政儲金匯兌業");
+  assert.ok(out.includes("Bank_Service"));
+  assert.ok(out.includes("Gov_owned"));
 });
 
 test("文教類加 Teacher 板", () => {
@@ -84,9 +109,10 @@ test("金融類的冷門小類也要涵蓋（原本漏掉）", () => {
     "創投業",
     "其他投資理財相關業",
   ]) {
-    assert.deepEqual(
-      boardsForIndustry(ind),
-      [...BASE_BOARDS, "Bank_Service"],
+    // 用 includes 而非 deepEqual：有些小類會同時命中別的板
+    //（郵政儲金匯兌業 = 金融 + 國營），那是正確行為
+    assert.ok(
+      boardsForIndustry(ind).includes("Bank_Service"),
       `${ind} 應加 Bank_Service`
     );
   }
