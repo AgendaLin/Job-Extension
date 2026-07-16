@@ -42,30 +42,27 @@
 }
 #jfr-panel .jfr-body { overflow-y: auto; padding: 4px 0; }
 #jfr-panel.jfr-collapsed .jfr-body { display: none; }
-#jfr-panel .jfr-news-head {
+/* 每個區塊（新聞與各板）的標題列：沿用原本板名的小灰字樣式，加上可點收合 */
+#jfr-panel .jfr-board {
   display: block;
   width: 100%;
-  padding: 8px 12px;
-  border: none;
-  border-bottom: 1px solid #f2f2f2;
-  background: #f7f7f7;
-  color: #555;
-  font-size: 12px;
-  font-weight: 700;
-  text-align: left;
-  cursor: pointer;
-  font-family: inherit;
-}
-#jfr-panel .jfr-news-head:hover { background: #f0f0f0; }
-#jfr-panel .jfr-caret { display: inline-block; width: 12px; color: #999; }
-#jfr-panel .jfr-news-collapsed .jfr-news-list { display: none; }
-#jfr-panel .jfr-news .jfr-item { color: #666; }
-#jfr-panel .jfr-board {
   padding: 8px 12px 4px;
+  border: none;
+  background: transparent;
+  font-family: inherit;
   font-size: 11px;
   font-weight: 700;
   color: #999;
+  text-align: left;
+  cursor: pointer;
 }
+#jfr-panel .jfr-board:hover { color: #555; }
+#jfr-panel .jfr-caret {
+  display: inline-block;
+  width: 12px;
+  color: #bbb;
+}
+#jfr-panel .jfr-section-collapsed .jfr-section-list { display: none; }
 #jfr-panel .jfr-item {
   display: block;
   padding: 6px 12px;

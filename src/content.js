@@ -153,43 +153,37 @@ function renderResults(panelEl, results) {
   const news = results.filter((r) => r.isNews);
   const rest = results.filter((r) => !r.isNews);
 
-  if (news.length) body.appendChild(buildNewsSection(news));
+  // 新聞跟各板長得一樣、都可收合；只有預設狀態不同（新聞收起，其他展開）
+  if (news.length) body.appendChild(buildSection("新聞", news, true));
   for (const [board, items] of groupByBoard(rest)) {
-    body.appendChild(buildBoardSection(board, items));
+    body.appendChild(buildSection(board, items, false));
   }
 }
 
-function buildNewsSection(items) {
+function buildSection(label, items, collapsed) {
   const section = document.createElement("div");
-  section.className = "jfr-section jfr-news jfr-news-collapsed";
+  section.className = "jfr-section";
+  if (collapsed) section.classList.add("jfr-section-collapsed");
 
   const head = document.createElement("button");
-  head.className = "jfr-news-head";
+  head.className = "jfr-board";
   const caret = document.createElement("span");
   caret.className = "jfr-caret";
-  caret.textContent = "▸";
-  head.append(caret, document.createTextNode(` 新聞 (${items.length})`));
+  caret.textContent = collapsed ? "▸" : "▾";
+  head.append(
+    caret,
+    document.createTextNode(`PTT / ${label} (${items.length})`)
+  );
   head.addEventListener("click", () => {
-    const collapsed = section.classList.toggle("jfr-news-collapsed");
-    caret.textContent = collapsed ? "▸" : "▾";
+    const nowCollapsed = section.classList.toggle("jfr-section-collapsed");
+    caret.textContent = nowCollapsed ? "▸" : "▾";
   });
 
   const list = document.createElement("div");
-  list.className = "jfr-news-list";
+  list.className = "jfr-section-list";
   for (const item of items) list.appendChild(buildItem(item));
 
   section.append(head, list);
-  return section;
-}
-
-function buildBoardSection(board, items) {
-  const section = document.createElement("div");
-  section.className = "jfr-section";
-  const label = document.createElement("div");
-  label.className = "jfr-board";
-  label.textContent = `PTT / ${board}`;
-  section.appendChild(label);
-  for (const item of items) section.appendChild(buildItem(item));
   return section;
 }
 
