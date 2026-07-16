@@ -58,6 +58,20 @@ test("沒有對照到綽號的公司只走通用規則、不會硬塞綽號", ()
   ]);
 });
 
+test("會計師事務所要能取到短名（PTT 只講「安永」，全名搜是 0 筆）", () => {
+  assert.deepEqual(normalizeCompanyName("安永聯合會計師事務所"), [
+    "安永聯合會計師事務所",
+    "安永",
+  ]);
+});
+
+test("法律事務所同理", () => {
+  assert.deepEqual(normalizeCompanyName("理律法律事務所"), [
+    "理律法律事務所",
+    "理律",
+  ]);
+});
+
 test("沒有法律後綴時只回全名", () => {
   assert.deepEqual(normalizeCompanyName("Google Taiwan"), ["Google Taiwan"]);
 });
