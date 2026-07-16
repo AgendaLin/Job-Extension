@@ -20,10 +20,17 @@ const LEGAL_SUFFIXES = [
   "事務所",
   // 其他組織型態
   "商業銀行",
+  "醫療財團法人", // 例：長庚醫療財團法人 → 長庚醫療 → 長庚
+  "財團法人",
+  "社團法人",
   "企業社",
   "工作室",
   "商行",
 ];
+
+// 組織型態「前綴」。台灣很多雇主是財團法人／國立機構，型態字擺在前面（財團法人工業技術研究院），
+// 只砍後綴會整串搜而得到 0 筆。這些要從頭砍。
+const ORG_PREFIXES = ["財團法人", "社團法人", "行政法人", "國立", "私立"];
 
 // 行業類別詞：接在品牌後面的類型字。剝掉可得更接近 PTT 叫法的核心名
 // （克勞德科技 → 克勞德）。PTT 搜尋是「標題包含」，搜較短的詞只會多撈不會漏。
@@ -47,6 +54,22 @@ function stripLegalSuffix(name) {
     if (idx > 0) return name.slice(0, idx).trim();
   }
   return name;
+}
+
+function stripOrgPrefix(name) {
+  let core = name;
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const p of ORG_PREFIXES) {
+      if (core.startsWith(p) && core.length > p.length) {
+        core = core.slice(p.length).trim();
+        changed = true;
+        break;
+      }
+    }
+  }
+  return core;
 }
 
 function stripIndustryWords(name) {
@@ -78,10 +101,14 @@ export function normalizeCompanyName(raw) {
   for (const seg of segments) {
     terms.add(seg);
 
-    // 取法律後綴「之前」的核心名。後綴可能夾在中間（例：「中華汽車工業股份有限公司楊梅廠」
+    // 先砍組織型態前綴（財團法人工業技術研究院 → 工業技術研究院）
+    const noPrefix = stripOrgPrefix(seg);
+    if (noPrefix !== seg) terms.add(noPrefix);
+
+    // 取組織型態後綴「之前」的核心名。後綴可能夾在中間（例：「中華汽車工業股份有限公司楊梅廠」
     // → 「中華汽車工業」），所以用 indexOf 切斷，而非只判斷結尾。
-    const core = stripLegalSuffix(seg);
-    if (core !== seg) terms.add(core);
+    const core = stripLegalSuffix(noPrefix);
+    if (core !== noPrefix) terms.add(core);
 
     // 再剝行業類別詞得到更短的核心名（克勞德科技 → 克勞德）。
     // 防護：縮完至少 2 字，且不能是通用詞，避免撞名撈到大量雜訊。

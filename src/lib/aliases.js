@@ -51,13 +51,24 @@ export const COMPANY_ALIASES = [
   { match: "富邦金融控股", nicknames: ["富邦金"] },
   { match: "國泰金融控股", nicknames: ["國泰金"] },
   { match: "中國信託商業銀行", nicknames: ["中國信託", "中信"] },
+  // 法人機構 / 國營（縮寫綽號規則推不出來，只能列）
+  { match: "工業技術研究院", nicknames: ["工研院"] },
+  { match: "資訊工業策進會", nicknames: ["資策會"] },
+  { match: "中華經濟研究院", nicknames: ["中經院"] },
+  { match: "台灣經濟研究院", nicknames: ["台經院"] },
+  { match: "國家中山科學研究院", nicknames: ["中科院"] },
+  { match: "台灣自來水", nicknames: ["台水"] },
+  { match: "台灣大學醫學院附設醫院", nicknames: ["台大醫院"] },
 ];
 
 export function aliasNicknames(name) {
   if (typeof name !== "string" || !name) return [];
+  // 台/臺 兩種寫法混用（臺灣自來水 vs 台灣自來水），統一成「台」再比對，
+  // 對照表的 match 一律用「台」，不必為了兩種寫法各列一筆。
+  const normalized = name.replace(/臺/g, "台");
   const out = [];
   for (const entry of COMPANY_ALIASES) {
-    if (name.includes(entry.match)) out.push(...entry.nicknames);
+    if (normalized.includes(entry.match)) out.push(...entry.nicknames);
   }
   return out;
 }

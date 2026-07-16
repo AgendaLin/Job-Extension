@@ -72,6 +72,29 @@ test("法律事務所同理", () => {
   ]);
 });
 
+test("財團法人（前綴）要砍掉，並補上縮寫綽號", () => {
+  assert.deepEqual(normalizeCompanyName("財團法人工業技術研究院"), [
+    "財團法人工業技術研究院",
+    "工業技術研究院",
+    "工研院",
+  ]);
+});
+
+test("醫療財團法人（後綴）也能取到短名", () => {
+  assert.deepEqual(normalizeCompanyName("長庚醫療財團法人"), [
+    "長庚醫療財團法人",
+    "長庚",
+  ]);
+});
+
+test("台/臺 混用不影響綽號對照", () => {
+  assert.deepEqual(normalizeCompanyName("國立臺灣大學醫學院附設醫院"), [
+    "國立臺灣大學醫學院附設醫院",
+    "臺灣大學醫學院附設醫院",
+    "台大醫院",
+  ]);
+});
+
 test("沒有法律後綴時只回全名", () => {
   assert.deepEqual(normalizeCompanyName("Google Taiwan"), ["Google Taiwan"]);
 });
