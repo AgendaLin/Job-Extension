@@ -89,7 +89,15 @@
 
 三個必勾的認證聲明（合規宣告）都可勾選同意。
 
-**隱私權政策網址**：因為不收集任何使用者資料，通常不需要。若表單仍要求，用一頁簡單聲明即可（GitHub README 或 Gist 皆可）。
+**隱私權政策網址**（直接複製）：
+```
+https://github.com/AgendaLin/Job-Extension/blob/main/PRIVACY.md
+```
+
+**支援／原始碼網址**（選填欄位可用）：
+```
+https://github.com/AgendaLin/Job-Extension
+```
 
 ## 螢幕截圖（必要，至少 1 張；1280x800 或 640x400）
 
