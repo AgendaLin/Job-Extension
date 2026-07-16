@@ -155,7 +155,10 @@ function renderResults(panelEl, results) {
 
   // 新聞跟各板長得一樣、都可收合；只有預設狀態不同（新聞收起，其他展開）
   if (news.length) body.appendChild(buildSection("新聞", news, true));
-  for (const [board, items] of groupByBoard(rest)) {
+  // 依筆數多的排前面。原本是照搜尋順序，導致專業板（往往才是最有料的那個，
+  // 例：安永的 Accounting 有 60 筆）永遠排在最後、要滑到底才看得到。
+  const sections = [...groupByBoard(rest)].sort((a, b) => b[1].length - a[1].length);
+  for (const [board, items] of sections) {
     body.appendChild(buildSection(board, items, false));
   }
 }
