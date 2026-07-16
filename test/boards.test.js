@@ -57,6 +57,50 @@ test("媒體傳播類加 media-chaos 板", () => {
   assert.deepEqual(boardsForIndustry("出版業"), [...BASE_BOARDS, "media-chaos"]);
 });
 
+// 以下產業名稱皆取自 104 官方分類表（Indust.json），非杜撰
+test("醫療類加 Nurse 板（實測長庚/台大醫院各 20 筆）", () => {
+  assert.deepEqual(boardsForIndustry("醫院"), [...BASE_BOARDS, "Nurse"]);
+  assert.deepEqual(boardsForIndustry("診所"), [...BASE_BOARDS, "Nurse"]);
+});
+
+test("文教類加 Teacher 板", () => {
+  assert.deepEqual(boardsForIndustry("補習班"), [...BASE_BOARDS, "Teacher"]);
+  assert.deepEqual(boardsForIndustry("安親／才藝班"), [
+    ...BASE_BOARDS,
+    "Teacher",
+  ]);
+});
+
+test("航空類加 Aviation 板", () => {
+  assert.deepEqual(boardsForIndustry("民航"), [...BASE_BOARDS, "Aviation"]);
+});
+
+test("金融類的冷門小類也要涵蓋（原本漏掉）", () => {
+  for (const ind of [
+    "信用合作社業",
+    "農／漁會信用部",
+    "郵政儲金匯兌業",
+    "電子支付業",
+    "創投業",
+    "其他投資理財相關業",
+  ]) {
+    assert.deepEqual(
+      boardsForIndustry(ind),
+      [...BASE_BOARDS, "Bank_Service"],
+      `${ind} 應加 Bank_Service`
+    );
+  }
+});
+
+test("建築關鍵字不可誤中製造業", () => {
+  // 「金屬結構及建築組件製造業」是製造業，不該搜建築板
+  assert.deepEqual(boardsForIndustry("金屬結構及建築組件製造業"), BASE_BOARDS);
+  assert.deepEqual(boardsForIndustry("建築及工程技術服務業"), [
+    ...BASE_BOARDS,
+    "Architecture",
+  ]);
+});
+
 test("同時命中多個規則時都加，且不重複", () => {
   const out = boardsForIndustry("法律及會計服務業");
   assert.deepEqual(out, [...BASE_BOARDS, "Accounting", "Law"]);
