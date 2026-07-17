@@ -95,6 +95,21 @@ test("醫療財團法人（後綴）也能取到短名", () => {
   ]);
 });
 
+test("外商前綴（新加坡商/美商）要從頭砍掉", () => {
+  assert.ok(
+    normalizeCompanyName("新加坡商蝦皮娛樂電商股份有限公司").includes("蝦皮"),
+    "應剝到品牌「蝦皮」"
+  );
+  assert.ok(
+    normalizeCompanyName("美商谷歌股份有限公司").includes("谷歌"),
+    "應剝到品牌「谷歌」"
+  );
+});
+
+test("飯店/酒店業別字要剝掉（晶華國際酒店 → 晶華）", () => {
+  assert.ok(normalizeCompanyName("晶華國際酒店股份有限公司").includes("晶華"));
+});
+
 test("台/臺 混用不影響綽號對照", () => {
   assert.deepEqual(normalizeCompanyName("國立臺灣大學醫學院附設醫院"), [
     "國立臺灣大學醫學院附設醫院",
