@@ -63,6 +63,8 @@ export const COMPANY_ALIASES = [
   { match: "國家中山科學研究院", nicknames: ["中科院"] },
   { match: "台灣自來水", nicknames: ["台水"] },
   { match: "台灣大學醫學院附設醫院", nicknames: ["台大醫院"] },
+  // 外商英文縮寫（規則推不出來，實測 PTT 有料）
+  { match: "台灣國際商業機器", nicknames: ["IBM"] },
 ];
 
 // 目前生效的字典。預設是內建快照，background 抓到遠端字典後會換掉。

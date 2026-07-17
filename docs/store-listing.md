@@ -1,13 +1,13 @@
-# Chrome 線上應用程式商店 — 上架資料（v1.3.2）
+# Chrome 線上應用程式商店 — 上架資料（v1.3.3）
 
-上傳檔案：`dist/job-forum-extension-v1.3.2.zip`
+上傳檔案：`dist/job-forum-extension-v1.3.3.zip`
 
 ## 基本資訊
 
 | 欄位 | 內容 |
 |---|---|
 | 名稱 | 求職論壇風評 |
-| 版本 | 1.3.2 |
+| 版本 | 1.3.3 |
 | 類別 | 工具（Tools） |
 | 語言 | 中文（繁體） |
 
@@ -108,7 +108,7 @@ https://github.com/AgendaLin/Job-Extension
 ## 只能你本人操作的步驟
 
 1. 註冊 Chrome Web Store 開發者帳號，付一次性 **US$5** 註冊費（我不能代為註冊帳號或輸入付款資訊）
-2. 上傳 `dist/job-forum-extension-v1.3.2.zip`
+2. 上傳 `dist/job-forum-extension-v1.3.3.zip`
 3. 貼上本文件的文案、上傳截圖與圖示
 4. 提交審查
 

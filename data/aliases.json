@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-07-14",
+  "updated": "2026-07-16",
   "aliases": [
     {
       "match": "台灣積體電路",
@@ -279,6 +279,12 @@
       "match": "台灣大學醫學院附設醫院",
       "nicknames": [
         "台大醫院"
+      ]
+    },
+    {
+      "match": "台灣國際商業機器",
+      "nicknames": [
+        "IBM"
       ]
     }
   ]
