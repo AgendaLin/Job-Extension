@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "求職論壇風評",
-  "version": "1.3.4",
+  "version": "1.3.5",
   "description": "在 104 職缺頁自動彙整這家公司在 PTT 上的討論，不用再開分頁一家家查。",
   "icons": {
     "16": "icons/icon16.png",
